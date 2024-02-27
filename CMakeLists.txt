@@ -30,9 +30,14 @@ add_subdirectory(third_party/mpark-variant)
 add_subdirectory(third_party/nlohmann_json)
 # build library first
 add_subdirectory(lib)
+set(LV_CONF_PATH
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/hello_world/inc/lv_conf.h
+        CACHE STRING "" FORCE)
+add_subdirectory(third_party/lvgl)
 
 # compile project
 add_source_files(src/${PROJ}/*.c src/${PROJ}/*.s src/${PROJ}/*.S src/${PROJ}/*.cpp)
 add_source_files(kendryte-standalone-demo/${PROJ}/*.c kendryte-standalone-demo/${PROJ}/*.s kendryte-standalone-demo/${PROJ}/*.S kendryte-standalone-demo/${PROJ}/*.cpp)
 include(./cmake/executable.cmake)
 
+target_link_libraries(${PROJECT_NAME} lvgl::lvgl)

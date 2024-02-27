@@ -19,7 +19,6 @@ IncludeCategories:
   - Regex:           '^"'
     Priority:        99
 IncludeIsMainRegex: "^$"
-IndentCaseLabels: true
 SpaceBeforeParens: Never
 BraceWrapping:
     # AfterCaseLabel: true

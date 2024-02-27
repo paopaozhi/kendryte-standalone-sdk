@@ -13,50 +13,62 @@
  * limitations under the License.
  */
 #include <bsp.h>
+#include <src/drivers/display/st7789/lv_st7789.h>
 #include <sysctl.h>
-#include "lcd.h"
-#include "fpioa.h"
+#include "lvgl.h"
+#include "st7789.h"
+#include "lv_port_disp.h"
 
-lcd_t *lcdPara = NULL;
-lcd_para_t lcd_para = {
-        .freq = 150000,
-        .height = 240,
-        .width = 320,
-        .offset_h0 = 0,
-        .offset_w0 = 0,
-        .offset_h1 = 0,
-        .offset_w1 = 0,
-        .lcd_type = LCD_TYPE_ST7789,
-        .oct = true,
-        .invert = 0,
-        .extra_para = NULL,
-        .rst_pin = 37,
-        .cs_pin = 36,
-        .dcx_pin = 38,
-        .clk_pin = 39,
-};
+lv_display_t *st7789_display;
+
+void lv_example_get_started_1(void)
+{
+    /*Change the active screen's background color*/
+    lv_obj_set_style_bg_color(lv_screen_active(), lv_color_hex(0x003a57), LV_PART_MAIN);
+
+    /*Create a white label, set its text and align it to the center*/
+    lv_obj_t * label = lv_label_create(lv_screen_active());
+    lv_label_set_text(label, "Hello world");
+    lv_obj_set_style_text_color(lv_screen_active(), lv_color_hex(0xffffff), LV_PART_MAIN);
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+}
+
+
+/* Send short command to the LCD. This function shall wait until the transaction finishes. */
+void my_lcd_send_cmd(lv_display_t *disp, const uint8_t *cmd, size_t cmd_size, const uint8_t *param, size_t param_size)
+{
+    for(int i = 0; i < cmd_size; i++)
+    {
+        tft_write_command(*(cmd + i));
+    }
+}
+
+/* Send large array of pixel data to the LCD. If necessary, this function has to do the byte-swapping. This function can do the transfer in the background. */
+void my_lcd_send_color(lv_display_t *disp, const uint8_t *cmd, size_t cmd_size, uint8_t *param, size_t param_size)
+{
+    tft_write_byte(cmd, cmd_size);
+}
 
 int core1_function(void *ctx)
 {
     uint64_t core = current_coreid();
     printf("Core %ld Hello world\n", core);
 
-    fpioa_set_function(lcd_para.rst_pin, FUNC_GPIOHS0 + RST_GPIONUM);
-    fpioa_set_function(lcd_para.dcx_pin, FUNC_GPIOHS0 + DCX_GPIONUM);
-    fpioa_set_function(lcd_para.cs_pin, FUNC_SPI0_SS0 + LCD_SPI_SLAVE_SELECT);
-    fpioa_set_function(lcd_para.clk_pin, FUNC_SPI0_SCLK);
+    tft_hard_init(15000000, true);
 
-    lcdPara = &lcd_mcu;
-//    lcdPara->lcd_para = &lcd_para;
-    lcdPara->lcd_para->rst_pin = 37;
-    lcdPara->lcd_para->cs_pin = 36;
-    lcdPara->lcd_para->dcx_pin = 38;
-    lcdPara->lcd_para->clk_pin = 39;
 
-    lcdPara->init(&lcd_para);
-    lcdPara->clear(YELLOW);
+    st7789_display = lv_st7789_create(320, 280, 0, my_lcd_send_cmd, my_lcd_send_color);
 
-    while(1);
+    lv_init();
+    lv_port_disp_init();
+
+    lv_example_get_started_1();
+    while(1){
+        lv_tick_inc(5);
+        lv_task_handler();
+        msleep(5);
+    }
+
 }
 
 int main(void)
