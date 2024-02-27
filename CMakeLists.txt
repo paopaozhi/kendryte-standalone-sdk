@@ -16,6 +16,9 @@ cmake_minimum_required(VERSION 3.5)
 include(./cmake/common.cmake)
 project(${PROJ} C CXX ASM)
 
+# close unused-function warning
+add_link_options(-Wno-unused-function)
+
 # config self use headers
 include(./cmake/macros.internal.cmake)
 header_directories(${SDK_ROOT}/lib)

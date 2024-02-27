@@ -14,11 +14,48 @@
  */
 #include <bsp.h>
 #include <sysctl.h>
+#include "lcd.h"
+#include "fpioa.h"
+
+lcd_t *lcdPara = NULL;
+lcd_para_t lcd_para = {
+        .freq = 150000,
+        .height = 240,
+        .width = 320,
+        .offset_h0 = 0,
+        .offset_w0 = 0,
+        .offset_h1 = 0,
+        .offset_w1 = 0,
+        .lcd_type = LCD_TYPE_ST7789,
+        .oct = true,
+        .invert = 0,
+        .extra_para = NULL,
+        .rst_pin = 37,
+        .cs_pin = 36,
+        .dcx_pin = 38,
+        .clk_pin = 39,
+};
 
 int core1_function(void *ctx)
 {
     uint64_t core = current_coreid();
     printf("Core %ld Hello world\n", core);
+
+    fpioa_set_function(lcd_para.rst_pin, FUNC_GPIOHS0 + RST_GPIONUM);
+    fpioa_set_function(lcd_para.dcx_pin, FUNC_GPIOHS0 + DCX_GPIONUM);
+    fpioa_set_function(lcd_para.cs_pin, FUNC_SPI0_SS0 + LCD_SPI_SLAVE_SELECT);
+    fpioa_set_function(lcd_para.clk_pin, FUNC_SPI0_SCLK);
+
+    lcdPara = &lcd_mcu;
+//    lcdPara->lcd_para = &lcd_para;
+    lcdPara->lcd_para->rst_pin = 37;
+    lcdPara->lcd_para->cs_pin = 36;
+    lcdPara->lcd_para->dcx_pin = 38;
+    lcdPara->lcd_para->clk_pin = 39;
+
+    lcdPara->init(&lcd_para);
+    lcdPara->clear(YELLOW);
+
     while(1);
 }
 
