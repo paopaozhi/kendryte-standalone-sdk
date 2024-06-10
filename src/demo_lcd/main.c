@@ -82,10 +82,6 @@ int main(void)
     /* 初始化LCD */
     lcd_init();
 
-    /* 显示图片 */
-    //lcd_draw_picture_half(0, 0, 320, 240, gImage_logo);
-    sleep(1);
-
     /* 显示字符 */
     lcd_draw_string(16, 60, "picture demo", RED);
     

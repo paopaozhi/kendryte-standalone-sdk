@@ -58,7 +58,8 @@
         "xstddef": "cpp",
         "xtr1common": "cpp",
         "bsp.h": "c",
-        "lcd.h": "c"
+        "lcd.h": "c",
+        "string.h": "c"
     },
     "cmake.additionalCompilerSearchDirs": [
         "E:\\MCU\\K210\\kendryte-toolchain\\bin"
