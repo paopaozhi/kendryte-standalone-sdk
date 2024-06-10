@@ -55,5 +55,13 @@
         "xmemory": "cpp",
         "xstddef": "cpp",
         "xtr1common": "cpp"
-    }
+    },
+    "cmake.additionalCompilerSearchDirs": [
+        "E:\\MCU\\K210\\kendryte-toolchain\\bin"
+    ],
+    "cmake.format.spaceAfterCommandName": false,
+    "cmake.configureSettings": {
+        "PROJ": "hello_world"
+    },
+    "cmake.generator": "MinGW Makefiles"
 }
