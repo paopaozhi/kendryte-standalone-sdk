@@ -4,14 +4,15 @@
 set(BUILDING_SDK "yes" CACHE INTERNAL "")
 
 # basic config
-if (NOT PROJ)
+if(NOT PROJ)
     get_filename_component(PROJ ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY)
     get_filename_component(PROJ ${PROJ} NAME)
     string(REPLACE " " "_" PROJ ${PROJ})
     message(STATUS "PROJ not set, use ${PROJ} as PROJ. Also, you can set it manually. e.g. -DPROJ=hello_world")
 else()
     message("PROJ = ${PROJ}")
-endif ()
+endif()
+
 cmake_minimum_required(VERSION 3.5)
 include(./cmake/common.cmake)
 project(${PROJ} C CXX ASM)
@@ -28,16 +29,15 @@ header_directories(kendryte-standalone-demo/${PROJ})
 add_subdirectory(third_party/gsl-lite)
 add_subdirectory(third_party/mpark-variant)
 add_subdirectory(third_party/nlohmann_json)
+
 # build library first
 add_subdirectory(lib)
-set(LV_CONF_PATH
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/hello_world/inc/lv_conf.h
-        CACHE STRING "" FORCE)
-add_subdirectory(third_party/lvgl)
+
+# add_subdirectory(third_party/lvgl)
 
 # compile project
 add_source_files(src/${PROJ}/*.c src/${PROJ}/*.s src/${PROJ}/*.S src/${PROJ}/*.cpp)
 add_source_files(kendryte-standalone-demo/${PROJ}/*.c kendryte-standalone-demo/${PROJ}/*.s kendryte-standalone-demo/${PROJ}/*.S kendryte-standalone-demo/${PROJ}/*.cpp)
 include(./cmake/executable.cmake)
 
-target_link_libraries(${PROJECT_NAME} lvgl::lvgl)
+# target_link_libraries(${PROJECT_NAME} lvgl::lvgl)
