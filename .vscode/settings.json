@@ -1,5 +1,7 @@
 {
     "files.associations": {
+        "*.gni": "gn",
+        "*.build": "json",
         "util.h": "c",
         "iomem.h": "c",
         "utils.h": "c",
@@ -55,14 +57,15 @@
         "xmemory": "cpp",
         "xstddef": "cpp",
         "xtr1common": "cpp",
-        "bsp.h": "c"
+        "bsp.h": "c",
+        "lcd.h": "c"
     },
     "cmake.additionalCompilerSearchDirs": [
         "E:\\MCU\\K210\\kendryte-toolchain\\bin"
     ],
     "cmake.format.spaceAfterCommandName": false,
     "cmake.configureSettings": {
-        "PROJ": "hello_world"
+        "PROJ": "demo_lcd"
     },
     "cmake.generator": "MinGW Makefiles"
 }

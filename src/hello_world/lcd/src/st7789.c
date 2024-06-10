@@ -1,5 +1,5 @@
 #include "st7789.h"
-#include "sipeed_spi.h"
+// #include "sipeed_spi.h"
 #include "sleep.h"
 #include "lcd.h"
 

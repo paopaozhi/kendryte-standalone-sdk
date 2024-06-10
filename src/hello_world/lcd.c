@@ -29,10 +29,18 @@ lcd_t *lcd = NULL;
 
 void my_lcd_init(void)
 {
+    printf("lcd init!\n");
     fpioa_set_function(lcd_para.rst_pin, FUNC_GPIOHS0 + RST_GPIONUM);
     fpioa_set_function(lcd_para.dcx_pin, FUNC_GPIOHS0 + DCX_GPIONUM);
     fpioa_set_function(lcd_para.cs_pin, FUNC_SPI0_SS0 + LCD_SPI_SLAVE_SELECT);
     fpioa_set_function(lcd_para.clk_pin, FUNC_SPI0_SCLK);
+
+    printf("[%d]: lcd_para.offset_x1=%d, offset_y1=%d, offset_x2=%d, \
+            offset_y2=%d,width_curr = % d,height_curr = % d, invert = % d, lcd_type = % d\r\n ",
+           __LINE__,
+           lcd_para.offset_h0,
+           lcd_para.offset_h1, lcd_para.offset_w0, lcd_para.offset_w1,
+           width_curr, height_curr, lcd_para.invert, lcd_para.lcd_type);
 
     lcd = &lcd_mcu;
 
@@ -49,6 +57,7 @@ void my_lcd_init(void)
         width_curr = 0;
         height_curr = 0;
         // mp_raise_OSError(ret);
+        printf("OSError!\n");
     } else
     {
         lcd_para.width = lcd->get_width();

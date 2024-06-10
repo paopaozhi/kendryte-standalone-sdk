@@ -15,9 +15,11 @@
 #include <bsp.h>
 #include <sysctl.h>
 
+extern void my_lcd_init(void);
+
 int core1_function(void *ctx)
 {
-    
+    my_lcd_init();
     while(1)
     {
         /* code */
@@ -26,6 +28,8 @@ int core1_function(void *ctx)
 
 int main(void)
 {
+    sysctl_set_power_mode(SYSCTL_POWER_BANK6, SYSCTL_POWER_V18);
+
     sysctl_pll_set_freq(SYSCTL_PLL0, 800000000);
     uint64_t core = current_coreid();
     int data;
